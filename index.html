@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>เครื่องมือช่วยแต่งภุชงคปยาตฉันท์ ๑๒</title>
   <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
-  <script src="/_sdk/element_sdk.js"></script>
+  
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
   <style>
         @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600;700&display=swap');
@@ -26,6 +27,7 @@
            border-radius: 15px;
            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             padding: 30px;
+            padding-bottom: 10px;
         }
 
         .logo-section {
@@ -399,6 +401,21 @@
            font-weight: 500;
         }
 
+        /* Visitor Counter Style */
+        .visitor-counter {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #64748b;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 15px;
+        }
+        
+        .visitor-count-number {
+            font-weight: bold;
+            color: #3498db;
+        }
+
         @media (max-width: 768px) {
             .container {
                margin: 10px;
@@ -444,7 +461,7 @@
    <div class="pattern-info">
     <h3 style="text-align: center; color: #2c3e50; margin-bottom: 15px;">ฉันทลักษณ์ภุชงคปยาตฉันท์ ๑๒</h3>
     <div style="text-align: center; display: flex; flex-direction: column; gap: 15px; align-items: center;">
-        <a href="https://www.homelittlegirl.com/index.php?topic=14045.0" target="_blank" rel="noopener noreferrer" style="display: inline-block; transition: transform 0.3s ease;">
+        <a href="https://www.homelittlegirl.com/index.php?topic=13957.0" target="_blank" rel="noopener noreferrer" style="display: inline-block; transition: transform 0.3s ease;">
             <img src="https://img5.pic.in.th/file/secure-sv1/logo-vichakarngo-8.png" alt="Home Little Girl" style="max-width: 200px; max-height: 80px; width: auto; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
         </a> 
         <a href="https://nonthaphathr.github.io/datalahu/" target="_blank" rel="noopener noreferrer" style="display: inline-block; transition: transform 0.3s ease;">
@@ -569,7 +586,7 @@
      <div class="word-group"><input type="text" class="word-input kru-required samphus-receive" data-verse="6" data-position="3" data-samphus="receive" placeholder="คำ 3"> <span class="word-type">ครุ</span> <span class="samphus-indicator samphus-receive-indicator">รับ</span></div>
      <div class="word-group"><input type="text" class="word-input lahu-required" data-verse="6" data-position="4" placeholder="คำ 4"> <span class="word-type">ลหุ</span></div>
      <div class="word-group"><input type="text" class="word-input kru-required" data-verse="6" data-position="5" placeholder="คำ 5"> <span class="word-type">ครุ</span></div>
-     <div class="word-group"><input type="text" class="word-input kru-required samphus-cross" data-verse="6" data-position="6" data-samphus="cross" placeholder="รับบท"> <span class="word-type">ครุ</span> <span class="samphus-indicator samphus-cross-indicator">รับบท/ส่ง</span></div>
+     <div class="word-group"><input type="text" class="word-input kru-required samphus-cross" data-verse="6" data-position="6" data-samphus="cross" placeholder="รับบท/ส่ง"> <span class="word-type">ครุ</span> <span class="samphus-indicator samphus-cross-indicator">รับบท/ส่ง</span></div>
     </div>
     <div class="verse-feedback" id="verse6-feedback"></div>
    </div>
@@ -620,7 +637,14 @@
      </div>
     </div>
    </div>
+   
+   <div class="visitor-counter">
+       <span id="busuanzi_container_site_pv">
+           จำนวนผู้เข้าชมทั้งหมด <span id="busuanzi_value_site_pv" class="visitor-count-number">...</span> ครั้ง
+       </span>
+   </div>
   </div>
+
   <script>
         // Default configuration
         const defaultConfig = {
@@ -784,9 +808,9 @@
                 return false; 
             }
 
-            // ** ตรรกะเดิมที่ปรับปรุงแล้ว: ตรวจสอบสระเสียงยาวที่บังคับให้เป็นครุ ก่อนตรวจสอบสระเสียงสั้น **
+            // ตรวจสอบสระเสียงยาวที่บังคับเป็นครุ (แก้ไขให้ เหตุ, ชาติ เป็นครุ)
             const forceKruLongVowels = ["า", "ี", "ื", "ู", "เ", "แ", "โ", "อ"];
-            const shorteners = ["ะ", "็"]; 
+            const shorteners = ["ะ", "็"];
 
             let hasLongVowel = false;
             for (let v of forceKruLongVowels) {
@@ -804,12 +828,12 @@
                         break;
                     }
                 }
-                if (processedWord.includes("เอาะ") || processedWord.includes("เออะ") || processedWord.includes("อัวะ")) {
+                if (processedWord.includes("เอาะ") || processedWord.includes("เออะ") || processedWord.includes("อัวะ") || processedWord.includes("เอียะ") || processedWord.includes("เอือะ")) {
                     isShortened = true;
                 }
 
                 if (!isShortened) {
-                    return false; 
+                    return false; // เป็นครุ
                 }
             }
  
@@ -929,19 +953,17 @@
         }
  
         function checkAllSamphus() {
-            // ตรวจสอบสัมผัสตามผังภุชงคปยาตฉันท์ ๑๒
-            // สัมผัสในบท: 
-            // 1. ท้ายวรรค 1 (คำที่ 6) -> คำที่ 3 ของวรรค 2
-            // 2. ท้ายวรรค 2 (คำที่ 6) -> ท้ายวรรค 3 (คำที่ 6)
-            // สัมผัสระหว่างบท:
-            // 3. ท้ายวรรค 4 (คำที่ 6) -> ท้ายวรรค 2 ของบทถัดไป (วรรค 6 คำที่ 6)
+            // ผังภุชงคปยาตฉันท์ ๑๒
+            // วรรค 1 คำที่ 6 -> วรรค 2 คำที่ 3
+            // วรรค 2 คำที่ 6 -> วรรค 3 คำที่ 6
+            // วรรค 4 คำที่ 6 -> วรรค 2 คำที่ 6 (ข้ามบท)
 
             const samphusConnections = [
                 // บทที่ 1
                 { send: { verse: 1, position: 6 }, receive: { verse: 2, position: 3 }, type: 'internal' },
                 { send: { verse: 2, position: 6 }, receive: { verse: 3, position: 6 }, type: 'internal' },
                 
-                // สัมผัสระหว่างบท (ท้ายบท 1 -> ท้ายวรรค 2 ของบท 2)
+                // เชื่อมบท
                 { send: { verse: 4, position: 6 }, receive: { verse: 6, position: 6 }, type: 'cross' },
 
                 // บทที่ 2
@@ -949,7 +971,6 @@
                 { send: { verse: 6, position: 6 }, receive: { verse: 7, position: 6 }, type: 'internal' }
             ];
             
-            // ลบ feedback เก่าออกให้หมดก่อน
             document.querySelectorAll('.samphus-feedback').forEach(el => el.remove());
 
             samphusConnections.forEach(connection => {
@@ -1002,7 +1023,6 @@
             let resultHTML = '';
             let hasContent = false;
             
-            // สร้างชุดข้อมูล 2 บท (แต่ละบทมี 4 วรรค)
             const stanzas = [
                 { start: 1, end: 4 },
                 { start: 5, end: 8 }
