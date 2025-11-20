@@ -3,7 +3,7 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>เครื่องมือช่วยแต่งภุชงคปยาตฉันท์ ๑๒ V.1.5 (Ror-Han Fix + Auto-Save)</title>
+  <title>เครื่องมือช่วยแต่งภุชงคปยาตฉันท์ ๑๒ V.1.6 (Ror-Han Advanced Fix)</title>
   <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
   
   <style>
@@ -799,18 +799,40 @@
             const cleanWord = word.replace(/[่้๊๋์]/g, '');
             const processedWord = processLeadingConsonants(cleanWord);
             
-            // --- FIX FOR ROR HAN (รร) ---
-            // Case: กรรม (Kamm) -> Rhymes with ทำ (Tum - Am vowel)
-            // We force 'กรรม' to behave like 'อำ' (Vowel=อำ, Final=กกา in standard simple logic or match however 'ทำ' is processed)
-            if (processedWord.endsWith("รรม")) {
-                return { vowel: 'อำ', finalGroup: 'กกา' }; 
+            // --- START UPDATE: Ror Han Specific Rules ---
+            // 1. Ror Han + Mae Kod (อรรถ, วรรต, กรรษ -> อะ + กด)
+            // ตรวจสอบตัวสะกด: ถ,ต,ษ,ส,ศ,ด,จ,ช,ฎ,ฏ,ฐ,ฑ,ฒ,ท,ธ
+            if (/รร[ถตษสศดจชฎฏฐฑฒทธ]$/.test(processedWord)) {
+                return { vowel: 'อะ', finalGroup: 'กด' };
             }
 
-            // Case: สรร (San), พรรณ (Phan) -> Rhymes with กัน (Kan - A vowel + N final)
-            if (processedWord.endsWith("รร") || processedWord.endsWith("รรณ")) {
+            // 2. Ror Han + Mae Kok (อรรค, มรรค -> อะ + กก)
+            // ตรวจสอบตัวสะกด: ค,ก,ข,ฆ
+            if (/รร[คกขฆ]$/.test(processedWord)) {
+                return { vowel: 'อะ', finalGroup: 'กก' };
+            }
+
+            // 3. Ror Han + Mae Kob (สรรพ, บรรพ -> อะ + กบ)
+            // ตรวจสอบตัวสะกด: พ,ภ,บ,ป,ฟ
+            if (/รร[พภบปฟ]$/.test(processedWord)) {
+                return { vowel: 'อะ', finalGroup: 'กบ' };
+            }
+
+            // 4. Ror Han + Mae Kom (กรรม, ธรรม -> อำ) - Keep standard convention
+            if (processedWord.endsWith('รรม')) {
+                return { vowel: 'อำ', finalGroup: 'กกา' }; // ใช้ อำ แทนเพื่อเข้าคู่กับ สระอำ
+            }
+            
+            // 5. Ror Han Open (สรร, บรร -> อะ + กน)
+            if (processedWord.endsWith('รร')) {
                 return { vowel: 'อะ', finalGroup: 'กน' };
             }
-            // ----------------------------
+            
+            // 6. Ror Han + N (พรรณ -> อะ + กน)
+            if (processedWord.endsWith('รรณ')) {
+                return { vowel: 'อะ', finalGroup: 'กน' };
+            }
+            // --- END UPDATE ---
             
             if (hasAiVowel(processedWord)) {
                 return { vowel: 'ไอ', finalGroup: 'เกย' };
@@ -1128,6 +1150,7 @@
                            if (isExactSame || isSameSound) {
                                sendFeedback.className = 'samphus-feedback samphus-warning';
                                receiveFeedback.className = 'samphus-feedback samphus-warning';
+                               
                                const warningMsg = isExactSame ? 'คำซ้ำ' : 'เสียงพ้อง';
                                sendFeedback.textContent = `⚠️ โปรดระวัง "สัมผัสซ้ำ" (${warningMsg}) กับ "${receiveWord}"`;
                                receiveFeedback.textContent = `⚠️ โปรดระวัง "สัมผัสซ้ำ" (${warningMsg}) กับ "${sendWord}"`;
