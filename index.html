@@ -3,7 +3,7 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>เครื่องมือช่วยแต่งภุชงคปยาตฉันท์ ๑๒ V.1.6 (Ror-Han Advanced Fix)</title>
+  <title>เครื่องมือช่วยแต่งภุชงคปยาตฉันท์ ๑๒ V.1.7 (Ror-Han & Mai Han-Akat Fix)</title>
   <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
   
   <style>
@@ -805,6 +805,12 @@
             if (/รร[ถตษสศดจชฎฏฐฑฒทธ]$/.test(processedWord)) {
                 return { vowel: 'อะ', finalGroup: 'กด' };
             }
+            
+            // Fix for broader 'กด' check if regex missed some (like ซ, ช, etc)
+            // Using comprehensive character set for Mae Kod
+            if (/รร[จดตถทธฎฏฐฑฒชซศษส]$/.test(processedWord)) {
+                return { vowel: 'อะ', finalGroup: 'กด' };
+            }
 
             // 2. Ror Han + Mae Kok (อรรค, มรรค -> อะ + กก)
             // ตรวจสอบตัวสะกด: ค,ก,ข,ฆ
@@ -941,6 +947,9 @@
             if (word.includes('อุ')) return 'อุ';
             if (word.includes('อิ')) return 'อิ';
             if (word.includes('อะ') || word.includes('ะ')) return 'อะ';
+            
+            // FIX: Add Mai Han-Akat check here
+            if (word.includes('ั')) return 'อะ';
             
             if (word.length === 1 || (word.length === 2 && "่้๊๋์".includes(word.charAt(1)))) {
                 return 'อะ'; 
